@@ -63,5 +63,5 @@ app.get('/marker/:id', (req, res) => {
 });
 
 app.listen(config.port, () => {
-    console.log('Server started at port 3000');
+    console.log(`Server started at port ${config.port}`);
 });

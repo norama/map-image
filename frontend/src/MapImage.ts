@@ -1,80 +1,74 @@
 import { LitElement, html, css } from 'lit';
+
 import { customElement, property } from 'lit/decorators.js';
 
-import { GetMarkersController } from './control/GetMarkersController';
+import leafletStyles from './styles/leafletStyles';
+import leafletSearchStyles from './styles/leafletSearchStyles';
+import leafletSearchMobileStyles from './styles/leafletSearchMobileStyles';
 
-const logo = new URL('../../assets/open-wc-logo.svg', import.meta.url).href;
+const L = window.L;
 
 @customElement('map-image')
 export class MapImage extends LitElement {
     @property({ type: String }) title = 'Map Image Admin';
 
-    static styles = css`
-        :host {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            font-size: calc(10px + 2vmin);
-            color: #1a2b42;
-            margin: 0 auto;
-            text-align: center;
-            background-color: var(--map-image-background-color);
-        }
+    map: any = null;
 
-        main {
-            flex-grow: 1;
-        }
-
-        .logo {
-            margin-top: 36px;
-            animation: app-logo-spin infinite 20s linear;
-        }
-
-        @keyframes app-logo-spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .app-footer {
-            font-size: calc(12px + 0.5vmin);
-            align-items: center;
-        }
-
-        .app-footer a {
-            margin-left: 5px;
+    static mapStyles = css`
+        div.map {
+            width: 100vw;
+            height: 100vh;
         }
     `;
 
-    getMarkersController = new GetMarkersController(this);
+    static styles = [
+        leafletStyles,
+        leafletSearchStyles,
+        leafletSearchMobileStyles,
+        MapImage.mapStyles
+    ];
+
+    firstUpdated() {
+        const mapElement = this.renderRoot.querySelector('div');
+        if (mapElement) {
+            const tileLayer = L.tileLayer(
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                {
+                    attribution:
+                        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                    tileSize: 256,
+                    maxZoom: 18
+                }
+            );
+            this.map = L.map(mapElement, {
+                zoomControl: true,
+                layers: [tileLayer],
+                maxZoom: 18
+            })
+                .fitWorld()
+                .setView([51.505, -0.09], 13);
+
+            this.map.zoomControl.setPosition('topright');
+
+            const searchControl = new (L.Control as any).Search({
+                url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
+                jsonpParam: 'json_callback',
+                propertyName: 'display_name',
+                propertyLoc: ['lat', 'lon'],
+                marker: L.circleMarker([0, 0], { radius: 30 }),
+                collapsed: false,
+                autoCollapse: false,
+                autoType: false,
+                minLength: 2
+            });
+
+            this.map.addControl(searchControl);
+
+            this.map.invalidateSize(false);
+        }
+    }
 
     render() {
-        return html`
-            <main>
-                <div class="logo"><img alt="open-wc logo" src=${logo} /></div>
-                <h1>${this.title}</h1>
-
-                <p>
-                    <get-markers-button
-                        .onClick=${this.getMarkersController.getMarkers}
-                    ></get-markers-button>
-                </p>
-            </main>
-
-            <p class="app-footer">
-                🚽 Made with love by
-                <a
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href="https://github.com/open-wc"
-                    >open-wc</a
-                >.
-            </p>
-        `;
+        return html` <div class="map"></div> `;
     }
 }
