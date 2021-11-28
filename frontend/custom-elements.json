@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/MapImage.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "MapImage",
+          "members": [
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "'My app'",
+              "attribute": "title"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "'My app'",
+              "fieldName": "title"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "map-image",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "MapImage",
+          "declaration": {
+            "name": "MapImage",
+            "module": "src/MapImage.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/map-image.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "map-image",
+          "declaration": {
+            "name": "MapImage",
+            "module": "/src/MapImage.js"
+          }
+        }
+      ]
+    }
+  ]
+}
