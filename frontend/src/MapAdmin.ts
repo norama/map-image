@@ -5,8 +5,8 @@ import { GetMarkersController } from './control/GetMarkersController';
 
 const logo = new URL('../../assets/open-wc-logo.svg', import.meta.url).href;
 
-@customElement('map-image')
-export class MapImage extends LitElement {
+@customElement('map-admin')
+export class MapAdmin extends LitElement {
     @property({ type: String }) title = 'Map Image Admin';
 
     static styles = css`
