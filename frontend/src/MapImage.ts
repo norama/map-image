@@ -55,9 +55,10 @@ export class MapImage extends LitElement {
                 jsonpParam: 'json_callback',
                 propertyName: 'display_name',
                 propertyLoc: ['lat', 'lon'],
-                marker: L.circleMarker([0, 0], { radius: 30 }),
+                marker: L.marker([0, 0]),
                 collapsed: false,
                 autoCollapse: false,
+                hideMarkerOnCollapse: true,
                 autoType: false,
                 minLength: 2
             });
