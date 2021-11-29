@@ -14,6 +14,7 @@
     },
     "dependencies": {
         "leaflet": "^1.7.1",
+        "leaflet-modal": "^0.2.0",
         "leaflet-search": "^3.0.2",
         "lit": "^2.0.2"
     },
