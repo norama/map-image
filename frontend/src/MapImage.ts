@@ -6,6 +6,8 @@ import leafletStyles from './styles/leafletStyles';
 import leafletSearchStyles from './styles/leafletSearchStyles';
 import leafletSearchMobileStyles from './styles/leafletSearchMobileStyles';
 import leafletModalStyles from './styles/leafletModalStyles';
+import leafletModalCustomStyles from './styles/leafletModalCustomStyles';
+import topcoatStyles from './styles/topcoatStyles';
 
 import { Map as LeafletMap, Marker, LeafletMouseEvent, LatLng } from 'leaflet';
 
@@ -31,6 +33,8 @@ export class MapImage extends LitElement {
         leafletSearchStyles,
         leafletSearchMobileStyles,
         leafletModalStyles,
+        leafletModalCustomStyles,
+        topcoatStyles,
         MapImage.mapStyles
     ];
 
@@ -107,7 +111,7 @@ export class MapImage extends LitElement {
 
     showModal() {
         this.map?.fire('modal', {
-            title: 'Custom header',
+            title: 'Add Item',
             content:
                 '<ul>' + new Array(5).join('<li>Content line</li>') + '</ul>',
             template: [
