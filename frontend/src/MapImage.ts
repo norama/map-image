@@ -12,7 +12,13 @@ import topcoatStyles from './styles/topcoatStyles';
 
 import { MapImageController } from './control/MapImageController';
 
-import { Map as LeafletMap, Marker, LeafletMouseEvent, LatLng } from 'leaflet';
+import {
+    Map as LeafletMap,
+    Marker,
+    LayerGroup,
+    LeafletMouseEvent,
+    LatLng
+} from 'leaflet';
 
 const L = window.L;
 
@@ -23,6 +29,8 @@ export class MapImage extends LitElement {
     marker?: Marker;
 
     modal?: any;
+
+    markersLayer?: LayerGroup;
 
     controller = new MapImageController(this);
 
@@ -89,7 +97,35 @@ export class MapImage extends LitElement {
 
         this.initMap();
 
+        this.markersLayer = new L.LayerGroup().addTo(this.map);
+
+        this.initMarkers();
+
         this.map.invalidateSize(false);
+    }
+
+    async initMarkers() {
+        const markers = await this.controller.loadMarkers();
+
+        markers.forEach((marker) => {
+            this.addMapMarker(marker);
+        });
+    }
+
+    addMapMarker(marker: TMarker) {
+        const popup = L.popup()
+            .setLatLng(marker.latlng)
+            .setContent('<div>HELLO</div>');
+
+        const mapMarker = L.marker(marker.latlng, {
+            icon: new L.Icon({
+                iconUrl: './assets/marker/marker-icon-gold.png',
+                iconAnchor: new L.Point(14, 41),
+                popupAnchor: new L.Point(0, -48)
+            })
+        }).bindPopup(popup);
+
+        this.markersLayer?.addLayer(mapMarker);
     }
 
     initMap() {
@@ -148,14 +184,20 @@ export class MapImage extends LitElement {
                 L.DomEvent.on(
                     modal._container.querySelector('.modal-ok'),
                     'click',
-                    () => {
+                    async () => {
                         const content = modal._container
                             .querySelector('item-content')
                             .content();
                         this.modal.hide();
                         this.modal = undefined;
 
-                        this.controller.addMarker(latlng, content);
+                        const marker = await this.controller.addMarker(
+                            latlng,
+                            content
+                        );
+                        this.addMapMarker(marker);
+                        this.marker?.remove();
+                        this.marker = undefined;
                     }
                 ).on(modal._container.querySelector('.close'), 'click', () => {
                     this.modal = undefined;
