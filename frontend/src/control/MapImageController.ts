@@ -12,6 +12,7 @@ export class MapImageController implements ReactiveController {
 
     addMarker = async (latlng: LatLng, content: TContent) => {
         const marker = await addMarker(latlng, content);
+        console.log(marker);
     };
 
     hostConnected() {}

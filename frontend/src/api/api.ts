@@ -20,7 +20,5 @@ export const addMarker = async (latlng: LatLng, content: TContent) => {
             content
         })
     });
-    const marker = await response.json();
-    console.log(marker);
-    return marker;
+    return await response.json();
 };

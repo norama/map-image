@@ -146,7 +146,6 @@ export class MapImage extends LitElement {
                         const content = modal._container
                             .querySelector('item-content')
                             .content();
-                        alert(JSON.stringify(content));
                         this.modal.hide();
                         this.modal = undefined;
 

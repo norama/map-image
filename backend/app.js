@@ -29,7 +29,9 @@ app.post('/add', (req, res) => {
     const sql = `INSERT INTO markers (emotion, comment, location) VALUES (${content.emotion}, '${content.comment}', ST_GeomFromText('POINT(${latlng.lat} ${latlng.lng})'));`;
     db.query(sql, (err, result) => {
         if (err) throw err;
-        res.send({ info: 'Row added to DB' });
+        console.log(result.insertId);
+        const id = result.insertId;
+        getMarker(id, res);
     });
 });
 
@@ -52,17 +54,34 @@ app.get('/list', (req, res) => {
     const sql = 'SELECT * FROM markers;';
     db.query(sql, (err, result) => {
         if (err) throw err;
-        res.send(result);
+        res.send(result.map((record) => marker(record)));
     });
 });
 
 app.get('/marker/:id', (req, res) => {
-    const sql = `SELECT * FROM markers WHERE id = ${req.params.id};`;
+    const id = req.params.id;
+    getMarker(id, res);
+});
+
+const getMarker = (id, res) => {
+    const sql = `SELECT * FROM markers WHERE id = ${id};`;
     db.query(sql, (err, result) => {
         if (err) throw err;
-        res.send(result);
+        if (result.length === 0) {
+            throw `No marker with id:  ${id}`;
+        }
+        res.send(marker(result[0]));
     });
-});
+};
+
+const marker = (result) => {
+    const { id, comment, emotion, image, location } = result;
+    return {
+        id,
+        latlng: { lat: location.x, lng: location.y },
+        content: { comment, emotion, image }
+    };
+};
 
 app.listen(config.port, () => {
     console.log(`Server started at port ${config.port}`);
