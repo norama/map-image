@@ -7,6 +7,7 @@ import leafletSearchStyles from './styles/leafletSearchStyles';
 import leafletSearchMobileStyles from './styles/leafletSearchMobileStyles';
 import leafletModalStyles from './styles/leafletModalStyles';
 import leafletModalCustomStyles from './styles/leafletModalCustomStyles';
+import leafletLocateStyles from './styles/leafletLocateStyles';
 import topcoatStyles from './styles/topcoatStyles';
 
 import { MapImageController } from './control/MapImageController';
@@ -39,6 +40,7 @@ export class MapImage extends LitElement {
         leafletModalStyles,
         leafletModalCustomStyles,
         topcoatStyles,
+        leafletLocateStyles,
         MapImage.mapStyles
     ];
 
@@ -80,6 +82,10 @@ export class MapImage extends LitElement {
         });
 
         this.map.addControl(searchControl);
+
+        (L.control as any)
+            .locate({ drawCircle: false, drawMarker: false })
+            .addTo(this.map);
 
         this.initMap();
 
