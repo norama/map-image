@@ -25,8 +25,8 @@ app.use(express.json());
 
 app.post('/add', (req, res) => {
     console.log('body', req.body);
-    const sql =
-        "INSERT INTO markers (emotion, comment, location) VALUES (false, 'xxx', ST_GeomFromText('POINT(2.3 3.4)'));";
+    const { latlng, content } = req.body;
+    const sql = `INSERT INTO markers (emotion, comment, location) VALUES (${content.emotion}, '${content.comment}', ST_GeomFromText('POINT(${latlng.lat} ${latlng.lng})'));`;
     db.query(sql, (err, result) => {
         if (err) throw err;
         res.send({ info: 'Row added to DB' });

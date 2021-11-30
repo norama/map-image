@@ -143,17 +143,14 @@ export class MapImage extends LitElement {
                     modal._container.querySelector('.modal-ok'),
                     'click',
                     () => {
-                        alert(
-                            JSON.stringify(
-                                modal._container
-                                    .querySelector('item-content')
-                                    .content()
-                            )
-                        );
+                        const content = modal._container
+                            .querySelector('item-content')
+                            .content();
+                        alert(JSON.stringify(content));
                         this.modal.hide();
                         this.modal = undefined;
 
-                        this.controller.addMarker(latlng);
+                        this.controller.addMarker(latlng, content);
                     }
                 ).on(modal._container.querySelector('.close'), 'click', () => {
                     this.modal = undefined;
