@@ -39,6 +39,11 @@ export class MapImage extends LitElement {
             width: 100vw;
             height: 100vh;
         }
+
+        div.popup {
+            width: 300px;
+            margin: 10px 10px 10px 0;
+        }
     `;
 
     static styles = [
@@ -115,7 +120,9 @@ export class MapImage extends LitElement {
     addMapMarker(marker: TMarker) {
         const popup = L.popup()
             .setLatLng(marker.latlng)
-            .setContent('<div>HELLO</div>');
+            .setContent(
+                `<div class="popup"><read-marker-content emotion=${marker.content.emotion} comment='${marker.content.comment}'></read-marker-content></div>`
+            );
 
         const mapMarker = L.marker(marker.latlng, {
             icon: new L.Icon({
@@ -163,7 +170,7 @@ export class MapImage extends LitElement {
     showModal(latlng: LatLng) {
         this.map?.fire('modal', {
             title: 'Item',
-            content: `<item-content></item-content>`,
+            content: `<add-marker-content></add-marker-content>`,
             template: [
                 '<div class="modal-header"><h2>{title}</h2></div>',
                 '<hr>',
@@ -186,7 +193,7 @@ export class MapImage extends LitElement {
                     'click',
                     async () => {
                         const content = modal._container
-                            .querySelector('item-content')
+                            .querySelector('add-marker-content')
                             .content();
                         this.modal.hide();
                         this.modal = undefined;

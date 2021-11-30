@@ -79,7 +79,7 @@ const marker = (result) => {
     return {
         id,
         latlng: { lat: location.x, lng: location.y },
-        content: { comment, emotion, image }
+        content: { comment, emotion: !!emotion, image }
     };
 };
 

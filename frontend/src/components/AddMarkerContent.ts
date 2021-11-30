@@ -2,8 +2,8 @@ import { css, html, LitElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 
-@customElement('item-content')
-export class ItemContent extends LitElement {
+@customElement('add-marker-content')
+export class AddMarkerContent extends LitElement {
     static styles = css`
         .root {
             margin: 10px 0;
@@ -77,12 +77,9 @@ export class ItemContent extends LitElement {
                     </div>
                 </div>
                 <label><b>Comment:</b></label>
-                <textarea
-                    ${ref(this.commentRef)}
-                    rows=${5}
-                    cols=${40}
-                    value="${this.comment}"
-                ></textarea>
+                <textarea ${ref(this.commentRef)} rows=${5} cols=${40}>
+${this.comment}</textarea
+                >
             </div>
         `;
     }
