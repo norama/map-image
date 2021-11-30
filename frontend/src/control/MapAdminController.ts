@@ -1,7 +1,7 @@
 import { ReactiveController, ReactiveControllerHost } from 'lit';
 import { getMarkers } from '../api/api';
 
-export class GetMarkersController implements ReactiveController {
+export class MapAdminController implements ReactiveController {
     host: ReactiveControllerHost;
 
     constructor(host: ReactiveControllerHost) {

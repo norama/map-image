@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
-import { GetMarkersController } from './control/GetMarkersController';
+import { MapAdminController } from './control/MapAdminController';
 
 const logo = new URL('../../assets/open-wc-logo.svg', import.meta.url).href;
 
@@ -51,7 +51,7 @@ export class MapAdmin extends LitElement {
         }
     `;
 
-    getMarkersController = new GetMarkersController(this);
+    controller = new MapAdminController(this);
 
     render() {
         return html`
@@ -61,7 +61,7 @@ export class MapAdmin extends LitElement {
 
                 <p>
                     <get-markers-button
-                        .onClick=${this.getMarkersController.getMarkers}
+                        .onClick=${this.controller.getMarkers}
                     ></get-markers-button>
                 </p>
             </main>

@@ -21,13 +21,15 @@ db.connect((err) => {
 const app = express();
 app.use(cors());
 app.options('*', cors());
+app.use(express.json());
 
-app.get('/add', (req, res) => {
+app.post('/add', (req, res) => {
+    console.log('body', req.body);
     const sql =
         "INSERT INTO markers (emotion, comment, location) VALUES (false, 'xxx', ST_GeomFromText('POINT(2.3 3.4)'));";
     db.query(sql, (err, result) => {
         if (err) throw err;
-        res.send('Row added to DB');
+        res.send({ info: 'Row added to DB' });
     });
 });
 

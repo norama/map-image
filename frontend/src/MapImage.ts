@@ -9,6 +9,8 @@ import leafletModalStyles from './styles/leafletModalStyles';
 import leafletModalCustomStyles from './styles/leafletModalCustomStyles';
 import topcoatStyles from './styles/topcoatStyles';
 
+import { MapImageController } from './control/MapImageController';
+
 import { Map as LeafletMap, Marker, LeafletMouseEvent, LatLng } from 'leaflet';
 
 const L = window.L;
@@ -20,6 +22,8 @@ export class MapImage extends LitElement {
     marker?: Marker;
 
     modal?: any;
+
+    controller = new MapImageController(this);
 
     static mapStyles = css`
         div.map {
@@ -107,14 +111,14 @@ export class MapImage extends LitElement {
                 })
                     .addTo(this.map)
                     .on('click', () => {
-                        this.showModal();
+                        this.showModal(latlng);
                     });
             }
-            this.showModal();
+            this.showModal(latlng);
         }
     }
 
-    showModal() {
+    showModal(latlng: LatLng) {
         this.map?.fire('modal', {
             title: 'Item',
             content: `<item-content></item-content>`,
@@ -148,6 +152,8 @@ export class MapImage extends LitElement {
                         );
                         this.modal.hide();
                         this.modal = undefined;
+
+                        this.controller.addMarker(latlng);
                     }
                 ).on(modal._container.querySelector('.close'), 'click', () => {
                     this.modal = undefined;
