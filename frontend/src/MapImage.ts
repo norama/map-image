@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 
-import { customElement, property } from 'lit/decorators.js';
+import { customElement } from 'lit/decorators.js';
 
 import leafletStyles from './styles/leafletStyles';
 import leafletSearchStyles from './styles/leafletSearchStyles';
@@ -15,11 +15,11 @@ const L = window.L;
 
 @customElement('map-image')
 export class MapImage extends LitElement {
-    @property({ type: String }) title = 'Map Image Admin';
-
     map?: LeafletMap;
 
     marker?: Marker;
+
+    modal?: any;
 
     static mapStyles = css`
         div.map {
@@ -84,7 +84,12 @@ export class MapImage extends LitElement {
 
     initMap() {
         this.map?.on('click', (event: LeafletMouseEvent) => {
-            this.setMarker(event.latlng);
+            if (this.modal) {
+                this.modal.hide();
+                this.modal = undefined;
+            } else {
+                this.setMarker(event.latlng);
+            }
         });
     }
 
@@ -111,43 +116,42 @@ export class MapImage extends LitElement {
 
     showModal() {
         this.map?.fire('modal', {
-            title: 'Add Item',
-            content:
-                '<ul>' + new Array(5).join('<li>Content line</li>') + '</ul>',
+            title: 'Item',
+            content: `<item-content></item-content>`,
             template: [
                 '<div class="modal-header"><h2>{title}</h2></div>',
                 '<hr>',
                 '<div class="modal-body">{content}</div>',
                 '<div class="modal-footer">',
                 '<button class="topcoat-button--large {OK_CLS}">{okText}</button>',
-                '<button class="topcoat-button--large {CANCEL_CLS}">{cancelText}</button>',
                 '</div>'
             ].join(''),
 
-            okText: 'Ok',
-            cancelText: 'Cancel',
+            okText: 'Add',
             OK_CLS: 'modal-ok',
-            CANCEL_CLS: 'modal-cancel',
 
-            width: 300,
+            width: 350,
 
-            onShow: function (evt: any) {
-                var modal = evt.modal;
+            onShow: (evt: any) => {
+                const modal = evt.modal;
+                this.modal = modal;
                 L.DomEvent.on(
                     modal._container.querySelector('.modal-ok'),
                     'click',
-                    function () {
-                        alert('you pressed ok');
-                        modal.hide();
+                    () => {
+                        alert(
+                            JSON.stringify(
+                                modal._container
+                                    .querySelector('item-content')
+                                    .content()
+                            )
+                        );
+                        this.modal.hide();
+                        this.modal = undefined;
                     }
-                ).on(
-                    modal._container.querySelector('.modal-cancel'),
-                    'click',
-                    function () {
-                        alert('You pressed cancel');
-                        modal.hide();
-                    }
-                );
+                ).on(modal._container.querySelector('.close'), 'click', () => {
+                    this.modal = undefined;
+                });
             }
         });
     }
@@ -163,14 +167,3 @@ export class MapImage extends LitElement {
         return html` <div class="map"></div> `;
     }
 }
-
-const marker = (latlng: LatLng) =>
-    L.marker(latlng, {
-        icon: new L.Icon({
-            iconUrl: './assets/search/marker-icon-blue.png',
-            iconAnchor: new L.Point(12.5, 41),
-            draggable: true
-        })
-    }).on('click', () => {
-        alert('cc');
-    });
