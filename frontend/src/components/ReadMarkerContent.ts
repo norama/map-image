@@ -1,11 +1,15 @@
 import { css, html, LitElement } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
+import { ifDefined } from 'lit/directives/if-defined.js';
+
+import { getMarker } from '../api/api';
 
 @customElement('read-marker-content')
 export class ReadMarkerContent extends LitElement {
     static styles = css`
         .root {
             margin: 10px 0;
+            width: 200px;
         }
 
         .emotion {
@@ -15,36 +19,71 @@ export class ReadMarkerContent extends LitElement {
             margin: 10px;
         }
 
-        img {
+        .emotion img {
             width: 30px;
             height: 30px;
         }
 
-        textarea {
-            padding: 8px;
+        .image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+        }
+
+        .image img {
+            width: 200px;
         }
     `;
 
-    @property()
-    emotion?: string;
+    async *getContent() {
+        let marker;
+        while (!marker) {
+            if (this.markerId) {
+                marker = await getMarker(this.markerId);
+                yield marker.content as TContent;
+            }
+        }
+    }
+
+    async firstUpdated() {
+        if (this.markerId) {
+            const marker = await getMarker(this.markerId);
+            this.content = marker.content;
+        }
+    }
 
     @property()
-    comment?: string;
+    markerId?: string;
+
+    @state()
+    content?: TContent;
 
     render() {
+        if (!this.content) {
+            return null;
+        }
         return html`
             <div class="root">
                 <div class="emotion">
                     <img
-                        src=${this.emotion === 'true'
+                        src=${this.content?.emotion === true
                             ? './assets/emotions/positive.jpg'
                             : './assets/emotions/negative.jpg'}
                     />
                 </div>
-                <textarea rows=${5} cols=${36} disabled>
-${this.comment ?? ''}</textarea
-                >
+                <div class="image">${this.renderImage()}</div>
             </div>
         `;
+    }
+
+    renderImage() {
+        return this.content?.image
+            ? html`<img
+                  src=${this.content?.image ?? undefined}
+                  alt=${this.content.comment}
+                  title=${this.content.comment}
+              />`
+            : html`${this.content?.comment}`;
     }
 }

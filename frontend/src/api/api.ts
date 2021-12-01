@@ -5,7 +5,6 @@ import { LatLng } from 'leaflet';
 export const getMarkers = async () => {
     const response = await fetch(`${config.apiurl}/list/`);
     const markers = await response.json();
-    console.log(markers);
     return markers;
 };
 
@@ -20,5 +19,10 @@ export const addMarker = async (latlng: LatLng, content: TContent) => {
             content
         })
     });
+    return await response.json();
+};
+
+export const getMarker = async (id: string) => {
+    const response = await fetch(`${config.apiurl}/marker/full/${id}`);
     return await response.json();
 };

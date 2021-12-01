@@ -56,7 +56,7 @@ export class AddMarkerContent extends LitElement {
     @property()
     comment = '';
 
-    image: string | null = null;
+    image?: string;
 
     render() {
         return html`
@@ -111,7 +111,6 @@ ${this.comment}</textarea
             const file = element.files[0];
             const reader = new FileReader();
             reader.onloadend = () => {
-                console.log('RESULT', reader.result);
                 this.image = reader.result as string;
             };
             reader.readAsDataURL(file);
@@ -120,8 +119,8 @@ ${this.comment}</textarea
 
     content() {
         return {
-            emotion: this.emotionRef.value?.checked,
-            comment: this.commentRef.value?.value,
+            emotion: !!this.emotionRef.value?.checked,
+            comment: this.commentRef.value?.value ?? '',
             image: this.image
         };
     }

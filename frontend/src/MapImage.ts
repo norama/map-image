@@ -41,8 +41,11 @@ export class MapImage extends LitElement {
         }
 
         div.popup {
-            width: 300px;
-            margin: 10px 10px 10px 0;
+            width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
         }
     `;
 
@@ -121,7 +124,7 @@ export class MapImage extends LitElement {
         const popup = L.popup()
             .setLatLng(marker.latlng)
             .setContent(
-                `<div class="popup"><read-marker-content emotion=${marker.content.emotion} comment='${marker.content.comment}'></read-marker-content></div>`
+                `<div class="popup"><read-marker-content markerId='${marker.id}'></read-marker-content></div>`
             );
 
         const mapMarker = L.marker(marker.latlng, {

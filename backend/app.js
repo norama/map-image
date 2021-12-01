@@ -26,7 +26,11 @@ app.use(express.json({ limit: '50mb' }));
 app.post('/add', (req, res) => {
     console.log('body', req.body);
     const { latlng, content } = req.body;
-    const sql = `INSERT INTO markers (emotion, comment, image, location) VALUES (${content.emotion}, '${content.comment}', '${content.image}', ST_GeomFromText('POINT(${latlng.lat} ${latlng.lng})'));`;
+    const sql = `INSERT INTO markers (emotion, comment, image, location) VALUES (${
+        content.emotion
+    }, '${content.comment}', ${
+        content.image ? `'${content.image}'` : null
+    }, ST_GeomFromText('POINT(${latlng.lat} ${latlng.lng})'));`;
     db.query(sql, (err, result) => {
         if (err) throw err;
         console.log(result.insertId);
@@ -64,7 +68,23 @@ app.get('/marker/:id', (req, res) => {
 });
 
 const getMarker = (id, res) => {
-    const sql = `SELECT * FROM markers WHERE id = ${id};`;
+    const sql = `SELECT id, comment, emotion, location FROM markers WHERE id = ${id};`;
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        if (result.length === 0) {
+            throw `No marker with id:  ${id}`;
+        }
+        res.send(marker(result[0]));
+    });
+};
+
+app.get('/marker/full/:id', (req, res) => {
+    const id = req.params.id;
+    getMarkerWithImage(id, res);
+});
+
+const getMarkerWithImage = (id, res) => {
+    const sql = `SELECT id, comment, emotion, location, image FROM markers WHERE id = ${id};`;
     db.query(sql, (err, result) => {
         if (err) throw err;
         if (result.length === 0) {
@@ -75,11 +95,11 @@ const getMarker = (id, res) => {
 };
 
 const marker = (result) => {
-    const { id, comment, emotion, image, location } = result;
+    const { id, comment, emotion, location, image } = result;
     return {
         id,
         latlng: { lat: location.x, lng: location.y },
-        content: { comment, emotion: !!emotion, image }
+        content: { comment, emotion: !!emotion, image: image ?? undefined }
     };
 };
 
