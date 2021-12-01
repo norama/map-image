@@ -68,8 +68,8 @@ export class ReadMarkerContent extends LitElement {
                 <div class="emotion">
                     <img
                         src=${this.content?.emotion === true
-                            ? './assets/emotions/positive.jpg'
-                            : './assets/emotions/negative.jpg'}
+                            ? './assets/emotions/positive.png'
+                            : './assets/emotions/negative.png'}
                     />
                 </div>
                 <div class="image">${this.renderImage()}</div>

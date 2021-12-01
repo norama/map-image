@@ -410,7 +410,7 @@ const leafletStyles = css`
 
     /* Default icon URLs */
     .leaflet-default-icon-path {
-        background-image: url(images/marker-icon.png);
+        background-image: url(./assets/marker/marker-icon-gold.png);
     }
 
     /* attribution and scale controls */

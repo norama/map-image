@@ -72,7 +72,7 @@ export class AddMarkerContent extends LitElement {
                             ?checked=${this.emotion === true}
                         />
                         <label for="true">
-                            <img src="./assets/emotions/positive.jpg" />
+                            <img src="./assets/emotions/positive.png" />
                         </label>
                     </div>
                     <div class="radio">
@@ -84,7 +84,7 @@ export class AddMarkerContent extends LitElement {
                             ?checked=${this.emotion === false}
                         />
                         <label for="false">
-                            <img src="./assets/emotions/negative.jpg" />
+                            <img src="./assets/emotions/negative.png" />
                         </label>
                     </div>
                 </div>

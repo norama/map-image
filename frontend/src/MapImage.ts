@@ -47,6 +47,10 @@ export class MapImage extends LitElement {
             justify-content: center;
             margin: 10px 0;
         }
+
+        .markerIcon {
+            opacity: 0.8;
+        }
     `;
 
     static styles = [
@@ -129,9 +133,13 @@ export class MapImage extends LitElement {
 
         const mapMarker = L.marker(marker.latlng, {
             icon: new L.Icon({
-                iconUrl: './assets/marker/marker-icon-gold.png',
-                iconAnchor: new L.Point(14, 41),
-                popupAnchor: new L.Point(0, -48)
+                iconUrl:
+                    marker.content.emotion === true
+                        ? './assets/marker/positive.png'
+                        : './assets/marker/negative.png',
+                iconAnchor: new L.Point(12, 12),
+                popupAnchor: new L.Point(0, -16),
+                className: 'markerIcon'
             })
         }).bindPopup(popup);
 
