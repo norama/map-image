@@ -9,6 +9,7 @@ import leafletModalStyles from './styles/leafletModalStyles';
 import leafletModalCustomStyles from './styles/leafletModalCustomStyles';
 import leafletLocateStyles from './styles/leafletLocateStyles';
 import topcoatStyles from './styles/topcoatStyles';
+import leafletSimpleButtonStyles from './styles/leafletSimpleButtonStyles';
 
 import { MapImageController } from './control/MapImageController';
 
@@ -61,6 +62,7 @@ export class MapImage extends LitElement {
         leafletModalCustomStyles,
         topcoatStyles,
         leafletLocateStyles,
+        leafletSimpleButtonStyles,
         MapImage.mapStyles
     ];
 
@@ -102,6 +104,16 @@ export class MapImage extends LitElement {
         });
 
         this.map.addControl(searchControl);
+
+        const addImageButton = new (L.Control as any).SimpleButton({
+            position: 'topleft',
+            text: 'Add Image with GPS',
+            click: (event: MouseEvent) => {
+                event.stopPropagation();
+                alert('Howdy!');
+            }
+        });
+        addImageButton.addTo(this.map);
 
         (L.control as any)
             .locate({ drawCircle: false, drawMarker: false })
