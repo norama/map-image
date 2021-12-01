@@ -19,6 +19,10 @@ export class AddMarkerContent extends LitElement {
             margin: 10px 60px 10px 0;
         }
 
+        .image {
+            margin: 10px 0;
+        }
+
         img {
             width: 30px;
             height: 30px;
@@ -31,24 +35,32 @@ export class AddMarkerContent extends LitElement {
             margin: 5px 20px 5px 0;
         }
 
+        input[type='file'] {
+            cursor: pointer !important;
+            margin: 5px 20px 10px 0;
+        }
+
         textarea {
             padding: 8px;
+            margin-top: 5px;
         }
     `;
 
     commentRef = createRef<HTMLInputElement>();
     emotionRef = createRef<HTMLInputElement>();
-
-    @property()
-    comment = '';
+    imageRef = createRef<HTMLInputElement>();
 
     @property({ type: Boolean })
     emotion = true;
 
+    @property()
+    comment = '';
+
+    image: string | null = null;
+
     render() {
         return html`
             <div class="root">
-                <label><b>Emotion:</b></label>
                 <div class="emotion">
                     <div class="radio">
                         <input
@@ -76,6 +88,16 @@ export class AddMarkerContent extends LitElement {
                         </label>
                     </div>
                 </div>
+                <div class="image">
+                    <label><b>Image:</b></label>
+                    <br />
+                    <input
+                        ${ref(this.imageRef)}
+                        type="file"
+                        @change=${() =>
+                            this.encodeImageFileAsURL(this.imageRef?.value)}
+                    />
+                </div>
                 <label><b>Comment:</b></label>
                 <textarea ${ref(this.commentRef)} rows=${5} cols=${40}>
 ${this.comment}</textarea
@@ -84,10 +106,23 @@ ${this.comment}</textarea
         `;
     }
 
+    encodeImageFileAsURL = (element?: HTMLInputElement) => {
+        if (element?.files) {
+            const file = element.files[0];
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                console.log('RESULT', reader.result);
+                this.image = reader.result as string;
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     content() {
         return {
+            emotion: this.emotionRef.value?.checked,
             comment: this.commentRef.value?.value,
-            emotion: this.emotionRef.value?.checked
+            image: this.image
         };
     }
 }

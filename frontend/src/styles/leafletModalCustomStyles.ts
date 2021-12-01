@@ -73,7 +73,7 @@ const leafletModalCustomStyles = css`
     .modal-body,
     .modal-footer {
         padding-left: 15px;
-        padding-right: 15px;
+        padding-right: 6px;
     }
 
     .dom-ex {

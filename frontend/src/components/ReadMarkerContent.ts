@@ -32,7 +32,6 @@ export class ReadMarkerContent extends LitElement {
     comment?: string;
 
     render() {
-        console.log('comment', this.comment);
         return html`
             <div class="root">
                 <div class="emotion">

@@ -1,7 +1,7 @@
 declare type TContent = {
     emotion: boolean;
     comment: string;
-    image: null;
+    image: string | null;
 };
 
 declare type TMarker = {

@@ -21,12 +21,12 @@ db.connect((err) => {
 const app = express();
 app.use(cors());
 app.options('*', cors());
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 app.post('/add', (req, res) => {
     console.log('body', req.body);
     const { latlng, content } = req.body;
-    const sql = `INSERT INTO markers (emotion, comment, location) VALUES (${content.emotion}, '${content.comment}', ST_GeomFromText('POINT(${latlng.lat} ${latlng.lng})'));`;
+    const sql = `INSERT INTO markers (emotion, comment, image, location) VALUES (${content.emotion}, '${content.comment}', '${content.image}', ST_GeomFromText('POINT(${latlng.lat} ${latlng.lng})'));`;
     db.query(sql, (err, result) => {
         if (err) throw err;
         console.log(result.insertId);
