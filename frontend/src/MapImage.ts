@@ -13,6 +13,8 @@ import leafletSimpleButtonStyles from './styles/leafletSimpleButtonStyles';
 
 import { MapImageController } from './control/MapImageController';
 
+import { exifLatLng } from './util/exifGPS';
+
 import {
     Map as LeafletMap,
     Marker,
@@ -110,7 +112,7 @@ export class MapImage extends LitElement {
             text: 'Add Image with GPS',
             click: (event: MouseEvent) => {
                 event.stopPropagation();
-                alert('Howdy!');
+                this.setMarker();
             }
         });
         addImageButton.addTo(this.map);
@@ -156,6 +158,8 @@ export class MapImage extends LitElement {
         }).bindPopup(popup);
 
         this.markersLayer?.addLayer(mapMarker);
+
+        mapMarker.openPopup();
     }
 
     initMap() {
@@ -169,28 +173,30 @@ export class MapImage extends LitElement {
         });
     }
 
-    setMarker(latlng: LatLng) {
+    setMarker(latlng?: LatLng) {
         if (this.map) {
-            if (this.marker) {
-                this.marker.setLatLng(latlng);
-            } else {
-                this.marker = L.marker(latlng, {
-                    icon: new L.Icon({
-                        iconUrl: './assets/search/marker-icon-blue.png',
-                        iconAnchor: new L.Point(12.5, 41),
-                        draggable: true
+            if (latlng) {
+                if (this.marker) {
+                    this.marker.setLatLng(latlng);
+                } else {
+                    this.marker = L.marker(latlng, {
+                        icon: new L.Icon({
+                            iconUrl: './assets/search/marker-icon-blue.png',
+                            iconAnchor: new L.Point(12.5, 41),
+                            draggable: true
+                        })
                     })
-                })
-                    .addTo(this.map)
-                    .on('click', () => {
-                        this.showModal(latlng);
-                    });
+                        .addTo(this.map)
+                        .on('click', () => {
+                            this.showModal(latlng);
+                        });
+                }
             }
             this.showModal(latlng);
         }
     }
 
-    showModal(latlng: LatLng) {
+    showModal(latlng?: LatLng) {
         this.map?.fire('modal', {
             title: 'Item',
             content: `<add-marker-content></add-marker-content>`,
@@ -215,19 +221,33 @@ export class MapImage extends LitElement {
                     modal._container.querySelector('.modal-ok'),
                     'click',
                     async () => {
-                        const content = modal._container
-                            .querySelector('add-marker-content')
-                            .content();
+                        const element =
+                            modal._container.querySelector(
+                                'add-marker-content'
+                            );
+                        const content = element.content() as TContent;
                         this.modal.hide();
                         this.modal = undefined;
 
-                        const marker = await this.controller.addMarker(
-                            latlng,
-                            content
-                        );
-                        this.addMapMarker(marker);
-                        this.marker?.remove();
-                        this.marker = undefined;
+                        if (!latlng && content.image) {
+                            latlng = await exifLatLng(content.image);
+                            if (latlng) {
+                                console.log(latlng);
+                                this.map?.flyTo(latlng);
+                            }
+                        }
+
+                        if (latlng) {
+                            const marker = await this.controller.addMarker(
+                                latlng,
+                                content
+                            );
+                            this.addMapMarker(marker);
+                            this.marker?.remove();
+                            this.marker = undefined;
+                        } else {
+                            alert('Could not add marker: no GPS location.');
+                        }
                     }
                 ).on(modal._container.querySelector('.close'), 'click', () => {
                     this.modal = undefined;

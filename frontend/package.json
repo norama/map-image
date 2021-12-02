@@ -13,6 +13,7 @@
         "start": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wds\""
     },
     "dependencies": {
+        "exif-js": "^2.3.0",
         "leaflet": "^1.7.1",
         "leaflet-modal": "^0.2.0",
         "leaflet-search": "^3.0.2",

@@ -94,8 +94,7 @@ export class AddMarkerContent extends LitElement {
                     <input
                         ${ref(this.imageRef)}
                         type="file"
-                        @change=${() =>
-                            this.encodeImageFileAsURL(this.imageRef?.value)}
+                        @change=${this.encodeImageFileAsURL}
                     />
                 </div>
                 <label><b>Comment:</b></label>
@@ -106,7 +105,8 @@ ${this.comment}</textarea
         `;
     }
 
-    encodeImageFileAsURL = (element?: HTMLInputElement) => {
+    encodeImageFileAsURL = () => {
+        const element = this.imageRef?.value;
         if (element?.files) {
             const file = element.files[0];
             const reader = new FileReader();
