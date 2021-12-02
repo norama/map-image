@@ -80,7 +80,8 @@ const leafletModalStyles = css`
         pointer-events: visible;
     }
     .leaflet-modal.show .modal-content {
-        margin-top: 40px;
+        margin-top: 40px !important;
+        max-width: 80%;
     }
     .leaflet-modal.show .overlay {
         opacity: 0.6;

@@ -22,6 +22,7 @@ const leafletSearchMobileStyles = css`
         /* SEARCH */
         .leaflet-control.leaflet-control-search {
             z-index: 2000;
+            max-width: 100%;
         }
         .leaflet-control-search .search-input {
             display: block;
@@ -34,6 +35,7 @@ const leafletSearchMobileStyles = css`
             padding: 0 0.125em;
             margin: 3px;
             padding-right: 30px;
+            min-width: 200px;
         }
         .leaflet-control-search .search-button:hover,
         .leaflet-control-search .search-button {

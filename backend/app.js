@@ -24,7 +24,6 @@ app.options('*', cors());
 app.use(express.json({ limit: '50mb' }));
 
 app.post('/add', (req, res) => {
-    console.log('body', req.body);
     const { latlng, content } = req.body;
     const sql = `INSERT INTO markers (emotion, comment, image, location) VALUES (${
         content.emotion
@@ -33,7 +32,6 @@ app.post('/add', (req, res) => {
     }, ST_GeomFromText('POINT(${latlng.lat} ${latlng.lng})'));`;
     db.query(sql, (err, result) => {
         if (err) throw err;
-        console.log(result.insertId);
         const id = result.insertId;
         getMarker(id, res);
     });

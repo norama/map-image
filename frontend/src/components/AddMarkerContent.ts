@@ -44,6 +44,11 @@ export class AddMarkerContent extends LitElement {
             padding: 8px;
             margin-top: 5px;
         }
+        @media only screen and (max-width: 600px) {
+            textarea {
+                max-width: 90%;
+            }
+        }
     `;
 
     commentRef = createRef<HTMLInputElement>();

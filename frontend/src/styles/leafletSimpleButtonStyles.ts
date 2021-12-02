@@ -45,6 +45,12 @@ const leafletSimpleButtonStyles = css`
         height: 26px;
     }
 
+    @media only screen and (max-width: 600px) {
+        .leaflet-touch .leaflet-control-simplebutton {
+            width: 200px;
+        }
+    }
+
     .leaflet-touch .leaflet-control-simplebutton a {
         font-size: 20px;
     }

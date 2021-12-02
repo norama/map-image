@@ -79,14 +79,16 @@ export class MapImage extends LitElement {
             }
         );
         this.map = L.map(mapElement, {
-            zoomControl: true,
+            zoomControl: mapElement.clientWidth > 600,
             layers: [tileLayer],
             maxZoom: 18
         })
             .fitWorld()
             .setView([51.505, -0.09], 13);
 
-        this.map.zoomControl.setPosition('topright');
+        if (mapElement.clientWidth > 600) {
+            this.map.zoomControl.setPosition('topright');
+        }
 
         const searchControl = new (L.Control as any).Search({
             url: 'https://nominatim.openstreetmap.org/search?format=json&q={s}',
@@ -232,7 +234,6 @@ export class MapImage extends LitElement {
                         if (!latlng && content.image) {
                             latlng = await exifLatLng(content.image);
                             if (latlng) {
-                                console.log(latlng);
                                 this.map?.flyTo(latlng);
                             }
                         }

@@ -30,9 +30,6 @@ const convertDMSToDD = (
 export const exifLatLng = async (src: string) => {
     const data = (await exifData(src)) as any;
 
-    console.log(data.GPSLatitude);
-    console.log(data.GPSLongitude);
-
     if (!data.GPSLatitude || !data.GPSLongitude) {
         return undefined;
     }
