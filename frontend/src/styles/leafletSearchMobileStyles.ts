@@ -30,7 +30,7 @@ const leafletSearchMobileStyles = css`
             background: #fff;
             border: 1px solid #666;
             border-radius: 2px;
-            height: 24px;
+            height: 34px;
             font-size: 1.25em;
             padding: 0 0.125em;
             margin: 3px;
@@ -57,7 +57,8 @@ const leafletSearchMobileStyles = css`
             background-position: 0px -62px;
             width: 26px;
             height: 26px;
-            right: 34px;
+            right: 46px;
+            top: 4px;
             margin: 3px;
         }
         .leaflet-control-search .search-tooltip {
