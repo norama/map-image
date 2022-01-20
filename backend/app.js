@@ -4,7 +4,7 @@ import mysql from 'mysql';
 
 import config from './config.js';
 
-var db = mysql.createConnection({
+const db = mysql.createConnection({
     host: 'localhost',
     user: 'guest',
     password: 'guest',
